@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class AdditionalMethods {
     double totalPrice=0.0;
-    double shippingFees=0.0;
-    private  Map<Product, Integer> products= new HashMap<>();
+    double totalWeight=0.0;
+
 
     public Double calcTotalShippingFees() {
-        return this.shippingFees = getTotalWeight() * 3;
+        return totalWeight/1000 * 30;
     }
 
     public void cartValidation (Cart cart) {
@@ -20,38 +20,33 @@ public class AdditionalMethods {
             throw new RuntimeException("Shopping cart is empty");
         Map<Product, Integer> products = cart.getProducts();
         for (Map.Entry<Product, Integer> product : products.entrySet()) {
-            if ((product instanceof ExpirableProducts && ((ExpirableProducts) product).isExpired() )||(product instanceof ShippableAndExpirable && ((ShippableAndExpirable) product).isExpired())) {
+            Product prod = product.getKey();
+            if ((prod instanceof ExpirableProducts && ((ExpirableProducts) prod).isExpired()) ||
+                    (prod instanceof ShippableAndExpirable && ((ShippableAndExpirable) prod).isExpired())) {
                 throw new RuntimeException("This product is expired");
             }
-            else
-                totalPrice += product.getValue()*product.getKey().getPrice();
+
+            if (prod instanceof Shippable) {
+                totalWeight += product.getValue() * ((Shippable) prod).getWeight();
+            }
+
+            totalPrice += product.getValue()*product.getKey().getPrice();
         }
     }
     public void customerValidation (Customer customer) {
-        if (totalPrice+shippingFees > customer.getBalance())
+        if (totalPrice+calcTotalShippingFees() > customer.getBalance())
             throw new RuntimeException("You have not enough money");
     }
 
-    public Double getTotalWeight() {
-        double totalWeight = 0;
-        for (Map.Entry<Product, Integer> entry : products.entrySet()) {
-            Product product = entry.getKey();
-            if (product instanceof ShippableProducts)
-                totalWeight += ((ShippableProducts) product).getWeight()*entry.getValue();
-            else if (product instanceof ShippableAndExpirable)
-                totalWeight += ((ShippableAndExpirable) product).getWeight()*entry.getValue();
-        }
-        return totalWeight;
-    }
-    public void shippingReport (Map<ShippableProducts, Integer> products) {
+    public void shippingReport (Map<Shippable, Integer> products) {
         System.out.println("** Shipment notice **");
-        for (Map.Entry<ShippableProducts, Integer> product : products.entrySet()) {
+        for (Map.Entry<Shippable, Integer> product : products.entrySet()) {
             double productWeight = product.getValue() * product.getKey().getWeight();
 
             System.out.println(product.getValue() + "X" + product.getKey().getName() + "             " +
                     "       "+ productWeight);
         }
-        System.out.println("Total package weight " + getTotalWeight()/1000 + "kg\n");
+        System.out.println("Total package weight " + totalWeight/1000.0 + "kg\n");
     }
 
     public void checkOutReceipt (Map<Product, Integer> products) {
@@ -64,8 +59,14 @@ public class AdditionalMethods {
         }
         System.out.println("----------------------------------");
         System.out.println("Sub Total " + "                           "+totalPrice);
-        System.out.println("Shipping Fees                             "+shippingFees);
-        System.out.println("Total " + "                               "+totalPrice+shippingFees);
+        System.out.println("Shipping Fees                             "+calcTotalShippingFees());
+        double totalAmount =totalPrice+calcTotalShippingFees();
+        System.out.println("Total " + "                               "+totalAmount);
+    }
+
+    public void reset() {
+        totalPrice = 0.0;
+        totalWeight = 0.0;
     }
 
 }

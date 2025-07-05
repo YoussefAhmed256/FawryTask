@@ -1,14 +1,14 @@
 package Models;
 
 public class Product {
-    private  final int id;
-    private  String name;
-    private  double price;
-    private  int quantity;
+    protected  final int id;
+    protected  String name;
+    protected  double price;
+    protected  int quantity;
 
     private int c=0;
 
-    public Product(String name, double price, int quantity, Double Weight) {
+    public Product(String name, double price, int quantity) {
         id = ++c;
         this.name = name;
         this.price = price;
@@ -18,9 +18,15 @@ public class Product {
     public Double getPrice() {
         return price;
     }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public String getName() {
         return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {
@@ -36,6 +42,12 @@ public class Product {
     public void removeQuantity(int quantity) {
         this.quantity -= quantity;
     }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-
+    @Override
+    public String toString() {
+        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", quantity=" + quantity + "]";
+    }
 }

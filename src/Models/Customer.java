@@ -1,28 +1,36 @@
 package Models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Customer {
-    protected final int Id;
-    private String Name;
-    private int Balance;
+    private final int id;
+    private String name;
+    private double balance;
 
     private int c=0;
 
-    public Customer(String name, int balance) {
-        Id=++c;
-        Name=name;
-        Balance=balance;
+    public Customer(String _name, double _balance) {
+        id=++c;
+        name=_name;
+        balance=_balance;
     }
     public int getId() {
-        return Id;
+        return id;
     }
     public String getName() {
-        return Name;
+        return name;
     }
-    public int getBalance() {
-        return Balance;
+    public double getBalance() {
+        return balance;
+    }
+    public void setBalance(double _balance) {
+        balance=_balance;
+    }
+    public void setName (String _name) {
+        name=_name;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer [id=" + id + ", name=" + name + ", balance=" + balance + "]";
     }
 
 }

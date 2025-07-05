@@ -7,8 +7,8 @@ import java.time.LocalDate;
 public class ExpirableProducts extends Product implements Expirapal {
     private LocalDate expiryDate;
 
-    public ExpirableProducts(String name, double price, int quantity, double Weight , LocalDate expiryDate) {
-        super(name, price, quantity, Weight);
+    public ExpirableProducts(String name, double price, int quantity , LocalDate expiryDate) {
+        super(name, price, quantity);
         this.expiryDate = expiryDate;
     }
 
@@ -16,12 +16,15 @@ public class ExpirableProducts extends Product implements Expirapal {
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     @Override
     public boolean isExpired() {
         if (expiryDate.isBefore(LocalDate.now()))
-            return false;
-        return true;
+            return true;
+        return false;
     }
 
 
