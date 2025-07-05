@@ -22,9 +22,7 @@ public class ExpirableProducts extends Product implements Expirapal {
 
     @Override
     public boolean isExpired() {
-        if (expiryDate.isBefore(LocalDate.now()))
-            return true;
-        return false;
+        return expiryDate.isBefore(LocalDate.now());
     }
 
 
